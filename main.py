@@ -28,6 +28,15 @@ def main() -> None:
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8", newline="") as f:
         f.write(text)
+    # Explicit read-back verification: re-read what was written and
+    # compare it byte-for-byte (as text) against the intended entry.
+    with open(OUTPUT_PATH, "r", encoding="utf-8", newline="") as f:
+        written = f.read()
+    if written != text:
+        raise SystemExit(
+            f"read-back verification failed: wrote {text!r} "
+            f"but read back {written!r}"
+        )
 
 
 if __name__ == "__main__":
